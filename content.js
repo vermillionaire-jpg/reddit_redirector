@@ -15,9 +15,9 @@ const incompatiblePaths = [
     "/rpan",
     "/appeals",
     "/media"
-];
+].some(d => url.pathname.startsWith(d));
 
-const isIncompatiblePath = incompatiblePaths.some(d => url.pathname.startsWith(d));
+// const isIncompatiblePath = incompatiblePaths.some(d => url.pathname.startsWith(d));
 
 const isMediaHost =
     host.includes("preview.redd.it") ||
@@ -33,12 +33,12 @@ chrome.storage.sync.get("redirectSwitch", ({ redirectSwitch }) => {
 
     if (host != "www.reddit.com" && host != "old.reddit.com") return;
 
-    if (redirectSwitch === "Enabled" && host == "www.reddit.com" && !isIncompatiblePath && !isMediaHost) {
+    if (redirectSwitch === "Enabled" && host == "www.reddit.com" && !incompatiblePaths && !isMediaHost) {
         const newUrl = url.href.replace("www.reddit.com", "old.reddit.com");
         window.location.replace(newUrl);
     }
 
-    if (redirectSwitch === "Disabled" && host == "old.reddit.com" && !isIncompatiblePath && !isMediaHost) {
+    if (redirectSwitch === "Disabled" && host == "old.reddit.com" && !incompatiblePaths && !isMediaHost) {
         const newUrl = url.href.replace("old.reddit.com", "www.reddit.com");
         window.location.replace(newUrl);
     }
